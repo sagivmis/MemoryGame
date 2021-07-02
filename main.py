@@ -148,6 +148,8 @@ def message(msg, colour, dim=None, font=font_style):
         dim = [WIDTH / 5, HEIGHT / 3]
     mesg = font.render(msg, True, colour)
     display.blit(mesg, dim)
+    pygame.display.flip()
+    time.sleep(0.5)
 
 def game(wins):
     y = 230
@@ -201,11 +203,14 @@ def game(wins):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT:
                 for card in card_list:
                     if card.rect.collidepoint(mouse_p):
-                        if len(shown_cards) < 2:
-                            shown_cards.append(card)
-                            show_card(card)
+                        if not card.switched:
+                            if len(shown_cards) < 2:
+                                shown_cards.append(card)
+                                show_card(card)
+                            else:
+                                break
                         else:
-                            break
+                            message("Can't choose the same card!", title_color, [190, 150], font=score_font)
 
         pygame.display.flip()
         clock.tick(30)
